@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="schedulerFactoryBean0"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="downloadScheduleJobTrigger" />
+				<ref bean="keywordDailyReportJobTrigger" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 百度数据下载定时任务 配置开始 -->
+	<!-- 
+	<bean id="downloadScheduleJob" class="com.cubead.jinjili.job.schedule.DownloadScheduleJob">
+		<property name="enable" value="true"></property>
+	</bean>
+ -->
+	<bean id="downloadScheduleJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="downloadScheduleJob" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="downloadScheduleJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="downloadScheduleJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 30 17 * * ?</value>
+		</property>
+	</bean>
+	<!-- 百度数据下载定时任务  配置 结束 -->
+	
+	<!-- 百度数据下载定时任务 配置开始 -->
+	<!-- 
+	<bean id="keywordDailyReportJob" class="com.cubead.jinjili.job.schedule.KeywordDailyReportJob">
+		<property name="enable" value="true"></property>
+	</bean>
+ -->
+	<bean id="keywordDailyReportJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="keywordDailyReportJob" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="keywordDailyReportJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="keywordDailyReportJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 40 17 * * ?</value>
+		</property>
+	</bean>
+	<!-- 百度数据下载定时任务  配置 结束 -->
+
+</beans>

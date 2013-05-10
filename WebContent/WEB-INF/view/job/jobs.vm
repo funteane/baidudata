@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>数据下载——金吉列</title>
+</head>
+<body>
+	#set($baseurl=$request.getContextPath())
+	<p>数据下载任务  <a href="$baseurl/report/reportList.do">关键词每日报表</a></p>
+	
+	<table width="100%" border="1">
+		<tr>
+			<td>序号</td>
+			<td>账户ID</td>
+			<td>任务</td>
+			<td>创建时间</td>
+			<td>开始时间</td>
+			<td>结束时间</td>
+			<td>FileID时间</td>
+			<td>索引时间</td>
+			<td>完成时间</td>
+			<td>完成状态</td>
+			<td>失败原因</td>
+			<td>操作</td>
+		</tr>
+    	#foreach($task in $pageBean.results)
+            <tr>
+    			<td>$task.id</td>
+    			<td>$!{task.accountId}</td>
+    			<td>
+					#if($task.taskType.name == "DOWNLOAD_WHOLEACCOUNT")
+						整账户全部
+					#elseif($task.taskType.name == "DOWNLOAD_INCREMENTACCOUNT")
+						整账户增量
+					#elseif($task.taskType.name == "DOWNLOAD_ACCOUNTROI")
+						账户ROI
+					#elseif($task.taskType.name == "DOWNLOAD_PLANROI")
+						计划ROI
+					#elseif($task.taskType.name == "DOWNLOAD_UNITROI")
+						单元ROI
+					#elseif($task.taskType.name == "DOWNLOAD_KEYWORDROI")
+						关键词ROI
+					#end
+				</td>
+				<td>$!{task.createDate}</td>
+    			<td>$!{task.startDate}</td>
+    			<td>$!{task.endDate}</td>
+    			<td>$!{task.fileIdDate}</td>
+    			<td>$!{task.indexDate}</td>
+    			<td>$!{task.finishDate}</td>
+				<td>
+					#if($task.taskStatus == "TODO")
+						将下载
+					#elseif($task.taskStatus == "IDDONE")
+						获取ID
+					#elseif($task.taskStatus == "FAIL")
+						失败
+					#elseif($task.taskStatus == "DOWNLODED")
+						下载完成
+					#elseif($task.taskStatus == "INDEXING")
+						索引中
+					#elseif($task.taskStatus == "DONE")
+						完成
+					#end
+				</td>
+    			<td>$!{task.reason}</td>
+				<td><a href="$baseurl/job/rexecute.do?id=$task.id&accountId=$task.accountId">重新执行</a></td>
+			</tr>
+    	#end
+		
+		
+    </table>
+	
+</body>
+</html>

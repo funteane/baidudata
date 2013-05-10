@@ -1,0 +1,54 @@
+<config>
+	<documentList>
+		<document name="common">
+			<fieldList>
+			    <!-- required -->
+				<field name="id"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="docType"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="searchEngine"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="networkType"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				
+				<!-- account info -->
+				<field name="keyword"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>YES</is_analyzed></field>				
+				<field name="keyword_NoAanalyzed"><type>string</type><boost>1</boost><is_store>NO</is_store><is_analyzed>NO</is_analyzed></field>				
+				<field name="campaign"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>YES</is_analyzed></field>
+				<field name="campaign_NoAanalyzed"><type>string</type><boost>1</boost><is_store>NO</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="adGroup"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>YES</is_analyzed></field>
+				<field name="adGroup_NoAanalyzed"><type>string</type><boost>1</boost><is_store>NO</is_store><is_analyzed>NO</is_analyzed></field>
+					
+				<field name="keywordId"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="campaignId"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="adGroupId"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="creativeId"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="folderId"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="folderName"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				
+				<field name="quality"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>				
+				<field name="keywordMatchType"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="keywordStatus"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="keywordPause"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="campaignPause"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>				
+				<field name="campaignStatus"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="campaignRegionTarget"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>YES</is_analyzed></field>
+				<field name="adGroupPause"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>					
+				<field name="adGroupStatus"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="creativePause"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			
+				<!-- roi -->
+				<field name="product"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+				<field name="dataType"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>			
+			    <field name="statDate"><type>date</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			    <field name="avgCpc"><type>float</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			    <field name="ctr"><type>float</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			    <field name="impressions"><type>int</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			    <field name="cost"><type>float</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			    <field name="clicks"><type>int</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			    <field name="conversions"><type>int</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			    <field name="avgPosition"><type>float</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			    
+				<field name="indexName"><type>string</type><boost>1</boost><is_store>YES</is_store><is_analyzed>NO</is_analyzed></field>
+			    															
+			</fieldList>
+		</document>		
+	</documentList>
+</config>
