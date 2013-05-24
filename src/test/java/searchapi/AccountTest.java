@@ -38,8 +38,11 @@ public class AccountTest {
 		indexer = new AccountIndexer(indexerManager);
 		
 		String token = "14085b1c9d84bb1b52b9b64cd6a71c08";
-		String userName = "金吉列英国事业部";
-		String password = "jjL.2013.jinjilie";
+//		String userName = "金吉列英国事业部";
+//		String userName = "baidu-金吉列留学2132840-007";
+//		String userName = "baidu-金吉列留学2132840-008";
+		String userName = "baidu-金吉列留学2132840-005";
+		String password = "JJL.2013.liuxue";
 		apiContext = new ApiContext(userName, password, Network.BAIDU ,Method.POST, token);
 			
 		

@@ -43,7 +43,7 @@ public class AccountCsvFileParser extends CsvFileParser{
 	}
 	
 	@Override
-	public Indexable nextIndexable() {
+	public Indexable nextIndexable() throws Exception{
 		Map<String, String> tempMap = super.next();
 		AccountModel accountModel = new AccountModel();
 		accountModel.setBalance(Tools.empty(tempMap.get("balance")) ? null : Double.parseDouble(tempMap.get("balance")));

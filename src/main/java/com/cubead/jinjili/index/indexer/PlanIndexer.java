@@ -130,7 +130,7 @@ public class PlanIndexer extends Indexer{
 		
 		planModel.setDeleted(document.get("deleted"));
 		
-		planModel.setCreateDate(Tools.getDate(document.get("createDate")));
+		planModel.setCreateDate(Tools.getNormalDate(document.get("createDate")));
 	
 		planModel.setIndexType(IndexType.valueOf(document.get("indexType")));
 		

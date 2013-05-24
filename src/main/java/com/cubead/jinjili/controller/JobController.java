@@ -44,10 +44,10 @@ public class JobController {
 	public ModelAndView rexecute(Long id, Long accountId){
 		Calendar calendar = Calendar.getInstance();
 		TaskModel taskModel = commonService.get(TaskModel.class, id);
-		calendar.setTime(taskModel.getCreateDate());
-		calendar.add(Calendar.DATE, -1);
-		Date endDate = calendar.getTime();
+		calendar.setTime(taskModel.getDataStartDate());
 		Date startDate = calendar.getTime();
+		calendar.setTime(taskModel.getDataEndDate());
+		Date endDate = calendar.getTime();
 		
 		BaiduAccount baiduAccount = baiduAccountService.getBaiduAccount(String.valueOf(accountId));
 		

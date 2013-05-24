@@ -16,6 +16,9 @@ public class RoiIndexer extends Indexer{
 		super(indexerManager);
 	}
 
+	public RoiIndexer() {
+	}
+
 	@Override
 	public Document convert2Document(Indexable indexable) {
 		Document document = new Document();

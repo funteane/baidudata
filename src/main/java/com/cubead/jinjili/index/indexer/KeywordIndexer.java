@@ -17,6 +17,10 @@ public class KeywordIndexer extends Indexer{
 		super(indexerManager);
 	}
 
+	public KeywordIndexer() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public Document convert2Document(Indexable indexable) {
 		KeywordModel keyword = (KeywordModel) indexable;
@@ -27,7 +31,7 @@ public class KeywordIndexer extends Indexer{
 		document.add(field);
 		
 		if (Tools.empty(keyword.getPlanId())) {
-			document.add(new Field("planId", keyword.getPlanId(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+			document.add(new Field("planId", keyword.getPlanId(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 		}
 
 		if (!Tools.empty(keyword.getQuality()) && keyword.getQuality() > 0) {
@@ -48,19 +52,19 @@ public class KeywordIndexer extends Indexer{
 		
 		document.add(new NumericField("price", Field.Store.YES, true).setFloatValue(keyword.getPrice()));
 		
-		field = new Field("pause", String.valueOf(keyword.getPause()), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS);
+		field = new Field("pause", String.valueOf(keyword.getPause()), Field.Store.YES, Field.Index.NOT_ANALYZED);
 		document.add(field);
 		
-		field = new Field("status", keyword.getStatus(), Field.Store.YES ,Field.Index.ANALYZED_NO_NORMS);
+		field = new Field("status", keyword.getStatus(), Field.Store.YES ,Field.Index.NOT_ANALYZED);
 		document.add(field);
 		
-		field = new Field("bidding_strategy", keyword.getBidding_strategy(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS);
+		field = new Field("bidding_strategy", keyword.getBidding_strategy(), Field.Store.YES, Field.Index.NOT_ANALYZED);
 		document.add(field);
 		
-		field = new Field("matchType", keyword.getMatchType(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS);
+		field = new Field("matchType", keyword.getMatchType(), Field.Store.YES, Field.Index.NOT_ANALYZED);
 		document.add(field);
 		
-		field = new Field("deleted", keyword.getDeleted(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS);
+		field = new Field("deleted", keyword.getDeleted(), Field.Store.YES, Field.Index.NOT_ANALYZED);
 		document.add(field);
 
 	    document.add(new Field("createDate", Tools.getSimpleDateString(keyword.getCreateDate()), Field.Store.YES, Field.Index.NOT_ANALYZED));

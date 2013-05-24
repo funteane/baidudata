@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.cubead.jinjili.domain.model.Indexable;
-import com.cubead.jinjili.domain.model.Operation;
 import com.cubead.jinjili.domain.model.PlanModel;
 import com.cubead.jinjili.index.indexer.IndexMangerFactory.IndexType;
 import com.cubead.jinjili.util.Constants;
@@ -72,7 +71,7 @@ public class PlanCsvFileParser extends CsvFileParser{
 	}
 	
 	@Override
-	public Indexable nextIndexable() {
+	public Indexable nextIndexable() throws Exception{
 		Map<String, String> tempMap = super.next();
 		PlanModel planModel = new PlanModel();
 		planModel.setPause(tempMap.get("pause") == null ? false : Boolean.valueOf(tempMap.get("pause")));

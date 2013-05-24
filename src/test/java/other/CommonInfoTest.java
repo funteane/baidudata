@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -63,6 +65,7 @@ public class CommonInfoTest {
 		String directoryName = Constants.REPORT_DOWNLOAD_PATH;
 		File directory = new File(directoryName);
 		String[] fileNames = directory.list();
+		ArrayUtils.reverse(fileNames);
 		for (String string : fileNames) {
 			System.out.println(string);
 		}

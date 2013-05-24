@@ -38,7 +38,7 @@ public class KeywordParserTest {
 	}
 	
 	@Test
-	public void index(){
+	public void index() throws Exception{
 		while(csvFileParser.hasNext()){
 			KeywordModel keywordModel = (KeywordModel) csvFileParser.nextIndexable();
 			indexer.index("keywordId", keywordModel.getKeywordId(), keywordModel, 1.0f, false);

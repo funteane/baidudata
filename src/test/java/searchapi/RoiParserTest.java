@@ -35,7 +35,7 @@ public class RoiParserTest {
 	}
 	
 	@Test
-	public void index(){
+	public void index() throws Exception{
 		while(csvFileParser.hasNext()){
 			RoiModel roiModel = (RoiModel) csvFileParser.nextIndexable();
 			roiModel.setRoiType(RoiType.KEYWORD);

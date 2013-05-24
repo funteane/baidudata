@@ -23,9 +23,12 @@ public abstract class Indexer {
 	
 	private IndexerManager indexerManager;
 	
-	
 	public Indexer(IndexerManager indexerManager){
 		this.indexerManager = indexerManager;
+	}
+	
+	public Indexer(){
+		
 	}
 
 	/**
@@ -36,16 +39,16 @@ public abstract class Indexer {
 	 * @param updated		是否更新
 	 */
 	public void index(String field, String value, Indexable  indexable, float boost, boolean updated){
-		logger.info("开始索引");
+//		logger.info("开始索引");
 		Document document = convert2Document(indexable);
-		logger.info(document);
+//		logger.info(document);
 		document.setBoost(boost);
 		if (updated) {
 			indexerManager.update(document, field, value);
 		}else {
 			indexerManager.save(document);
 		}
-		logger.info("索引完成 ");
+//		logger.info("索引完成 ");
 	}
 	
 	/**
@@ -58,9 +61,9 @@ public abstract class Indexer {
 	
 	
 	public List<Indexable> search(Query query, int rows) {
-		IndexSearcher searcher = indexerManager.getIndexSearcher();
 		List<Indexable> indexables = new ArrayList<Indexable>();
 		try {
+			IndexSearcher searcher = indexerManager.getIndexSearcher();
 			logger.info("遍历查询结果");
 			TopDocs tds = searcher.search(query, rows);
 			for(ScoreDoc sd : tds.scoreDocs) {
@@ -75,7 +78,7 @@ public abstract class Indexer {
 			logger.error(e.getMessage(), e);
 		}finally {
 			try {
-				indexerManager.release(searcher);
+				indexerManager.releaseSearch();
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
 			}
@@ -84,9 +87,9 @@ public abstract class Indexer {
 	}
 	
 	public List<Document> searchDoc(Query query, int rows) {
-		IndexSearcher searcher = indexerManager.getIndexSearcher();
 		List<Document> documents = new ArrayList<Document>();
 		try {
+			IndexSearcher searcher = indexerManager.getIndexSearcher();
 			TopDocs tds = searcher.search(query, rows);
 			for(ScoreDoc sd : tds.scoreDocs) {
 				Document document = searcher.doc(sd.doc);
@@ -96,7 +99,7 @@ public abstract class Indexer {
 			logger.error(e.getMessage(), e);
 		}finally {
 			try {
-				indexerManager.release(searcher);
+				indexerManager.releaseSearch();
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
 			}
@@ -111,5 +114,18 @@ public abstract class Indexer {
 	public IndexerManager getIndexerManager() {
 		return indexerManager;
 	}
+
+
+//	public IndexSearcher getIndexSearcher() {
+//		return indexSearcher;
+//	}
+//
+//
+//	public void setIndexSearcher(IndexSearcher indexSearcher) {
+//		this.indexSearcher = indexSearcher;
+//	}
+//	
+	
+	
 
 }

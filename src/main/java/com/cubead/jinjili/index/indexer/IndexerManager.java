@@ -1,21 +1,17 @@
 package com.cubead.jinjili.index.indexer;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NRTManager;
-import org.apache.lucene.search.NRTManager.TrackingIndexWriter;
-import org.apache.lucene.search.NRTManagerReopenThread;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.SearcherFactory;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -25,10 +21,11 @@ public class IndexerManager {
 	protected static Logger logger = Logger.getLogger(IndexerManager.class);
 	
 	private Directory directory = null;
-	private NRTManager nrtManager = null;
 	private IndexWriter indexWriter = null;
-	private TrackingIndexWriter trackingIndexWriter;
+	private IndexSearcher indexSearcher;
 	private Analyzer analyzer;
+	
+	private String indexPath;
 	
 	public IndexerManager(String indexPath, Analyzer analyzer){
 		try {
@@ -42,7 +39,7 @@ public class IndexerManager {
 	public IndexerManager(){
 		try {
 			analyzer = new StandardAnalyzer(Version.LUCENE_36);
-			init("D:/temp/index/account/2466159/", analyzer);
+			init("D:/temp/index/account/6099124/", analyzer);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -59,20 +56,11 @@ public class IndexerManager {
 
 	private void init(String indexPath, Analyzer analyzer) throws Exception {
 		this.analyzer = analyzer;
-		directory = FSDirectory.open(new File(indexPath));
-		indexWriter = new IndexWriter(directory,new IndexWriterConfig(Version.LUCENE_36, analyzer));
-		trackingIndexWriter = new TrackingIndexWriter(indexWriter);
-		SearcherFactory searcherFactory = new SearcherFactory();
-		nrtManager  = new NRTManager(trackingIndexWriter, searcherFactory);
-		NRTManagerReopenThread nrtManagerReopenThread = new NRTManagerReopenThread(nrtManager, 0.5, 0.0025);
-//			nrtManagerReopenThread.setName("JJL");
-		nrtManagerReopenThread.start();
+//		directory = FSDirectory.open(new File(indexPath));
+		this.indexPath = indexPath;
 	}
 	
-	
-	public IndexSearcher getIndexSearcher() {
-		return nrtManager.acquire();
-	}
+
 	
 	/**
 	 * 根据索引Id删除索引
@@ -80,8 +68,8 @@ public class IndexerManager {
 	 */
 	public void delete(String id) {
 		try {
-			trackingIndexWriter.deleteDocuments(new Term("id", id));
-//			ntm.maybeReopen(true);
+			getIndexWriter().deleteDocuments(new Term("id", id));
+//			indexWriter.commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		} 
@@ -89,8 +77,8 @@ public class IndexerManager {
 	
 	public void delete(Query... queries){
 		try {
-			trackingIndexWriter.deleteDocuments(queries);
-		} catch (IOException e) {
+			getIndexWriter().deleteDocuments(queries);
+		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
 	}
@@ -104,9 +92,8 @@ public class IndexerManager {
 	 */
 	public void update(Document document, String field, String value) {
 		try {
-			trackingIndexWriter.updateDocument(new Term(field, value), document);
+			getIndexWriter().updateDocument(new Term(field, value), document);
 //			indexWriter.commit();
-//			nrtManager.maybeReopen(true);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		} 
@@ -117,19 +104,14 @@ public class IndexerManager {
 	 * @param document
 	 */
 	public void save(Document document){
-		System.out.println(document);
-		System.out.println(trackingIndexWriter);
-		logger.info("加入文档");
+//		System.out.println(document);
+//		logger.info("加入文档");
 		try {
-			trackingIndexWriter.addDocument(document);
-//			indexWriter.commit();
+			getIndexWriter().addDocument(document);
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-	}
-	
-	public void release(IndexSearcher searcher) throws Exception{
-		nrtManager.release(searcher);
 	}
 	
 	
@@ -137,19 +119,23 @@ public class IndexerManager {
 		return analyzer;
 	}
 
-	public NRTManager getNrtManager() {
-		return nrtManager;
-	}
-
-	public void release(){
+	public void releaseWriter(){
 		try {
-			indexWriter.commit();
-			if(IndexWriter.isLocked(directory)){
-				logger.info("try to close this indexwriter");
-				
+//			Directory directory =  FSDirectory.open(new File(indexPath));
+			if (directory == null) {
+				return;
+			}
+			logger.info("try to close this indexwriter");
+			if (indexWriter != null) {
+				indexWriter.commit();
 				indexWriter.close();  
+			}
+			
+//			System.out.println(directory);
+			if(IndexWriter.isLocked(directory)){
 				IndexWriter.unlock(directory);  
-			}  
+			}
+			directory = null;
 		} catch (Exception e) {
 			
 			logger.error(e.getMessage(), e);
@@ -157,13 +143,46 @@ public class IndexerManager {
 
 	}
 	
+	public void releaseSearch(){
+		try {
+			if (indexSearcher != null) {
+				indexSearcher.close();
+			}
+			directory = null;
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+	}	
+	
 	public void addDirectory(Directory... directories){
 		try {
-			trackingIndexWriter.addIndexes(directories);
+			indexWriter.addIndexes(directories);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
+
+	public IndexSearcher getIndexSearcher() throws Exception {
+		if (indexSearcher == null ) {
+			directory = FSDirectory.open(new File(indexPath));
+			indexSearcher = new IndexSearcher(IndexReader.open(directory));
+		}
+		return indexSearcher;
+	}
+
+	public IndexWriter getIndexWriter() throws Exception {
+		if (indexWriter == null) {
+			directory = FSDirectory.open(new File(indexPath));
+			System.err.println(directory);
+			indexWriter = new IndexWriter(directory,new IndexWriterConfig(Version.LUCENE_36, analyzer));
+		}
+		return indexWriter;
+	}
+	
+	
+	
+	
 
 
 }

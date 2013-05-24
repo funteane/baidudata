@@ -70,7 +70,7 @@ public class AccountIndexer extends Indexer{
 		accountModel.setType(document.get("type") == null ? 1 : Integer.parseInt(document.get("type")));
 		accountModel.setAccountId(document.get("accountId"));
 		
-		accountModel.setCreateDate(Tools.getDate(document.get("createDate")));
+		accountModel.setCreateDate(Tools.getNormalDate(document.get("createDate")));
 		
 		String[] excludeIps = document.getValues("excludeIp");
 		String[] openDomains = document.getValues("openDomains");

@@ -13,7 +13,8 @@ import com.cubead.jinjili.job.AbstractJob;
 import com.cubead.jinjili.job.manual.DownloadGroupManualJob;
 
 @Service
-public class DownloadScheduleJob extends AbstractJob{
+public class DownloadScheduleAccountJob extends AbstractJob{
+
 	
 	@Autowired
 	private IBaiduAccountService baiduAccountService;
@@ -33,7 +34,7 @@ public class DownloadScheduleJob extends AbstractJob{
 		downloadGroupManualJob.setStartDate(startDate);
 		downloadGroupManualJob.setEndDate(endDate);
 		downloadGroupManualJob.setDownloadAccount(true);
-		downloadGroupManualJob.setDownloadRoi(true);
+		downloadGroupManualJob.setDownloadRoi(false);
 		
 		List<BaiduAccount> accounts = baiduAccountService.getAllBaiduAccounts();
 		downloadGroupManualJob.setAccounts(accounts);
@@ -42,6 +43,4 @@ public class DownloadScheduleJob extends AbstractJob{
 		
 	}
 	
-	
-
 }

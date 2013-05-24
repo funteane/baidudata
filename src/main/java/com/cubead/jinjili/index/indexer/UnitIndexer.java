@@ -91,7 +91,7 @@ public class UnitIndexer extends Indexer{
 		unitModel.setMaxPrice(document.get("maxPrice") == null ? null : Float.valueOf(document.get("maxPrice")));
 		unitModel.setDeleted(document.get("deleted"));
 		
-		unitModel.setCreateDate(Tools.getDate(document.get("createDate")));
+		unitModel.setCreateDate(Tools.getNormalDate(document.get("createDate")));
 	
 		unitModel.setIndexType(IndexType.valueOf(document.get("indexType")));
 		

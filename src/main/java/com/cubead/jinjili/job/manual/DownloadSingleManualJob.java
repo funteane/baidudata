@@ -42,9 +42,13 @@ public class DownloadSingleManualJob extends AbstractJob{
 	@Override
 	public void execute() {
 		taskModel.setTaskStatus(TaskStatus.TODO);
+		taskModel.setAccountId(baiduAccount.getAccountId());
+		taskModel.setDataStartDate(startDate);
+		taskModel.setDataEndDate(endDate);
 		ApiContext apiContext = new ApiContext(baiduAccount.getUserName(), baiduAccount.getPassword(), Network.BAIDU ,Method.POST, baiduAccount.getToken());
 		DownloadContext downloadContext = new DownloadContext(taskModel, apiContext);
 		downloadContext.setApiContext(apiContext);
+		downloadContext.setAccountId(baiduAccount.getAccountId());
 		downloadContext.setTaskModel(taskModel);
 		downloadContext.setStartDate(startDate);
 		downloadContext.setEndDate(endDate);

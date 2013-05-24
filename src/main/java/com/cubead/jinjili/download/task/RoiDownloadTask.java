@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.cubead.jinjili.common.ApplicationProperties;
 import com.cubead.jinjili.domain.model.Indexable;
 import com.cubead.jinjili.domain.model.RoiModel;
 import com.cubead.jinjili.domain.model.RoiModel.RoiType;
@@ -54,7 +55,8 @@ public class RoiDownloadTask extends DownloadTask{
 		ApiContext apiContext = downloadContext.getApiContext();
 		ISearchApiClient searchApiClient = ClientManager.getSearchApiClient(apiContext);
 		String downloadUrl = searchApiClient.getrReportManager().requestReportDownloadUrl(downloadContext.getTaskModel().getFileId());
-		String downloadPath = Constants.WHOLEACCOUNT_DOWNLOAD_PATH;//ConfigUtil.getBaiduWholeAccountFolder((String)setting.get("tenantId")) + "/";
+		String downloadPath = ApplicationProperties.getProproperty("base.roi.download.path")
+				.concat(downloadContext.getAccountId()).concat("/");
 		File path = new File(downloadPath);
 		
 		if (!path.exists()){
@@ -119,27 +121,35 @@ public class RoiDownloadTask extends DownloadTask{
 			IndexerManager indexerManager = IndexMangerFactory.getIndexerManager(indexType, downloadContext.getAccountId());
 			CsvFileParser csvFileParser = new RoiCsvFileParser(path, Calendar.getInstance().getTime());
 			Indexer indexer = new RoiIndexer(indexerManager);
-			while(csvFileParser.hasNext()){
-				Indexable indexable = csvFileParser.nextIndexable();
-				RoiModel roiModel = (RoiModel) indexable;
-				roiModel.setRoiType(roiType);
-				String id;
-				if (roiModel.getRoiType() == RoiType.ACCOUNT) {
-					id = Tools.generateDocId(roiModel.getAccountId(), roiModel.getRoiType().name(), Tools.getSimpleDateString(roiModel.getCreateDate()));
-					indexer.index("id", id, indexable, 1.0f, false);
-				}else if (roiModel.getRoiType() == RoiType.PLAN) {
-					id = Tools.generateDocId(roiModel.getPlanId(), roiModel.getRoiType().name(), 	Tools.getSimpleDateString(roiModel.getCreateDate()));
-					indexer.index("id", id, indexable, 1.0f, false);
-				}else if (roiModel.getRoiType() == RoiType.UNIT) {
-					id = Tools.generateDocId(roiModel.getUnitId(), roiModel.getRoiType().name(), Tools.getSimpleDateString(roiModel.getCreateDate()));
-					indexer.index("id", id, indexable, 1.0f, false);
-				}else if (roiModel.getRoiType() == RoiType.KEYWORD) {
-					id = Tools.generateDocId(roiModel.getKeywordId(), roiModel.getRoiType().name(), Tools.getSimpleDateString(roiModel.getCreateDate()));
-					indexer.index("id", id, indexable, 1.0f, false);
-				}
+			try {
+				while(csvFileParser.hasNext()){
+					Indexable indexable = csvFileParser.nextIndexable();
+					RoiModel roiModel = (RoiModel) indexable;
+					roiModel.setRoiType(roiType);
+					String id;
+					if (roiModel.getRoiType() == RoiType.ACCOUNT) {
+						id = Tools.generateDocId(roiModel.getAccountId(), roiModel.getRoiType().name(), Tools.getSimpleDateString(roiModel.getCreateDate()));
+						indexer.index("id", id, indexable, 1.0f, true);
+					}else if (roiModel.getRoiType() == RoiType.PLAN) {
+						id = Tools.generateDocId(roiModel.getPlanId(), roiModel.getRoiType().name(), 	Tools.getSimpleDateString(roiModel.getCreateDate()));
+						indexer.index("id", id, indexable, 1.0f, true);
+					}else if (roiModel.getRoiType() == RoiType.UNIT) {
+						id = Tools.generateDocId(roiModel.getUnitId(), roiModel.getRoiType().name(), Tools.getSimpleDateString(roiModel.getCreateDate()));
+						indexer.index("id", id, indexable, 1.0f, true);
+					}else if (roiModel.getRoiType() == RoiType.KEYWORD) {
+						id = Tools.generateDocId(roiModel.getKeywordId(), roiModel.getRoiType().name(), Tools.getSimpleDateString(roiModel.getCreateDate()));
+						indexer.index("id", id, indexable, 1.0f, true);
+					}
+					
+				}		
+			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
+				throw new Exception(e);
+			}finally{
+				indexerManager.releaseWriter();
 				
-			}		
-			indexerManager.release();
+			}
+				
 		}
 	}
 }

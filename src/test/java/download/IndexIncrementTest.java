@@ -37,6 +37,7 @@ import com.cubead.searchapi.client.data.ApiContext;
 import com.cubead.searchapi.client.type.Method;
 import com.cubead.searchapi.client.type.Network;
 
+
 public class IndexIncrementTest {
 	private static Map<String, IndexType> indexTypeMap = new HashMap<String, IndexType>();
 	static{
@@ -46,7 +47,7 @@ public class IndexIncrementTest {
 		indexTypeMap.put("KeywordFilePath", IndexType.KEYWORD);
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		String token = "14085b1c9d84bb1b52b9b64cd6a71c08";
 		String userName = "bj-dafengso";
 		String password = "Bylf2008";
@@ -118,7 +119,7 @@ public class IndexIncrementTest {
 				indexer.index(roiModel.getAccountId(), roiModel.getAccountId(), indexable, 1.0f, false);
 				
 			}		
-			indexerManager.release();
+			indexerManager.releaseWriter();
 		}
 		
 		
@@ -142,19 +143,19 @@ public class IndexIncrementTest {
 			CsvFileParser csvFileParser;
 			Indexer indexer ;
 			switch (indexType) {
-			case ACCOUNT:
-				indexerManager = IndexMangerFactory.getIndexerManager(indexType, downloadContext0.getAccountId());
-				csvFileParser = new AccountCsvFileParser(path, Calendar.getInstance().getTime());
-				indexer = new AccountIndexer(indexerManager);
-				
-				while(csvFileParser.hasNext()){
-					Indexable indexable = csvFileParser.nextIndexable();
-					AccountModel accountModel = (AccountModel) indexable;
-					accountModel.setDeleted("0");
-					indexer.index("accountId", accountModel.getAccountId(), indexable, 1.0f, true);
-				}		
-				indexerManager.release();
-				break;
+//			case ACCOUNT:
+//				indexerManager = IndexMangerFactory.getIndexerManager(indexType, downloadContext0.getAccountId());
+//				csvFileParser = new AccountCsvFileParser(path, Calendar.getInstance().getTime());
+//				indexer = new AccountIndexer(indexerManager);
+//				
+//				while(csvFileParser.hasNext()){
+//					Indexable indexable = csvFileParser.nextIndexable();
+//					AccountModel accountModel = (AccountModel) indexable;
+//					accountModel.setDeleted("0");
+//					indexer.index("accountId", accountModel.getAccountId(), indexable, 1.0f, true);
+//				}		
+//				indexerManager.releaseWriter();
+//				break;
 			case PLAN:
 				indexerManager = IndexMangerFactory.getIndexerManager(indexType, downloadContext0.getAccountId());
 				csvFileParser = new PlanCsvFileParser(path, Calendar.getInstance().getTime());
@@ -164,36 +165,36 @@ public class IndexIncrementTest {
 					PlanModel planModel = (PlanModel) indexable;
 					indexer.index("planId", planModel.getPlanId(), indexable, 1.0f, true);
 				}
-				indexerManager.release();
+				indexerManager.releaseWriter();
 				break;
-			case UNIT:
-				indexerManager = IndexMangerFactory.getIndexerManager(indexType, downloadContext0.getAccountId());
-				csvFileParser = new UnitCsvFileParser(path, Calendar.getInstance().getTime());
-				indexer = new UnitIndexer(indexerManager);
-				while(csvFileParser.hasNext()){
-					Indexable indexable = csvFileParser.nextIndexable();
-					UnitModel unitModel = (UnitModel) indexable;
-					indexer.index("unitId", unitModel.getUnitId(), indexable, 1.0f, true);
-				}		
-				indexerManager.release();
-				break;
-			case KEYWORD:
-				indexerManager = IndexMangerFactory.getIndexerManager(indexType, downloadContext0.getAccountId());
-				IndexerManager roiIndexerManager = IndexMangerFactory.getIndexerManager(IndexType.KEYWORDROI, downloadContext0.getAccountId());
-				csvFileParser = new KeywordCsvFileParser(path, Calendar.getInstance().getTime());
-				indexer = new KeywordIndexer(indexerManager);
-				Indexer qualityUpdateIndexer = new QualityUpdateIndexer(roiIndexerManager);
-				while(csvFileParser.hasNext()){
-					Indexable indexable = csvFileParser.nextIndexable();
-					KeywordModel keywordModel = (KeywordModel) indexable;
-					
-					indexer.index("keywordId", keywordModel.getKeywordId(), indexable, 1.0f, true);
-					qualityUpdateIndexer.index("keywordId", keywordModel.getKeywordId(), indexable, 1.0f, true);
-				}		
-				indexerManager.release();
-				roiIndexerManager.release();
+//			case UNIT:
+//				indexerManager = IndexMangerFactory.getIndexerManager(indexType, downloadContext0.getAccountId());
+//				csvFileParser = new UnitCsvFileParser(path, Calendar.getInstance().getTime());
+//				indexer = new UnitIndexer(indexerManager);
+//				while(csvFileParser.hasNext()){
+//					Indexable indexable = csvFileParser.nextIndexable();
+//					UnitModel unitModel = (UnitModel) indexable;
+//					indexer.index("unitId", unitModel.getUnitId(), indexable, 1.0f, true);
+//				}		
+//				indexerManager.releaseWriter();
+//				break;
+//			case KEYWORD:
+//				indexerManager = IndexMangerFactory.getIndexerManager(indexType, downloadContext0.getAccountId());
+////				IndexerManager roiIndexerManager = IndexMangerFactory.getIndexerManager(IndexType.KEYWORDROI, downloadContext0.getAccountId());
+//				csvFileParser = new KeywordCsvFileParser(path, Calendar.getInstance().getTime());
+//				indexer = new KeywordIndexer(indexerManager);
+////				Indexer qualityUpdateIndexer = new QualityUpdateIndexer(roiIndexerManager);
+//				while(csvFileParser.hasNext()){
+//					Indexable indexable = csvFileParser.nextIndexable();
+//					KeywordModel keywordModel = (KeywordModel) indexable;
+//					
+//					indexer.index("keywordId", keywordModel.getKeywordId(), indexable, 1.0f, true);
+////					qualityUpdateIndexer.index("keywordId", keywordModel.getKeywordId(), indexable, 1.0f, true);
+//				}		
+//				indexerManager.releaseWriter();
+////				roiIndexerManager.releaseWriter();
 				
-				break;
+//				break;
 			}
 		}
 	}

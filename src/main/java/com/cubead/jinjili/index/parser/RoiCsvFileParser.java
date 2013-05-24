@@ -29,7 +29,7 @@ public class RoiCsvFileParser extends CsvFileParser{
 	}
 	
 	@Override
-	public Indexable nextIndexable() {
+	public Indexable nextIndexable() throws Exception {
 		Map<String, String> valueMap = super.next();
 		
 		RoiModel roiModel = new RoiModel();
@@ -41,7 +41,7 @@ public class RoiCsvFileParser extends CsvFileParser{
 			try {
 				Method method = clazz.getMethod(methodName, new Class[]{typeMapping.get(fieldName)});
 				if (typeMapping.get(fieldName).equals(Date.class)) {
-					method.invoke(roiModel, new Object[]{Tools.getDate(valueMap.get(header[i]))});
+					method.invoke(roiModel, new Object[]{Tools.getNormalDate(valueMap.get(header[i]))});
 				}else if (typeMapping.get(fieldName).equals(Long.class)) {
 					method.invoke(roiModel, new Object[]{Long.valueOf(valueMap.get(header[i]))});
 				}else if (typeMapping.get(fieldName).equals(Double.class)) {
@@ -57,6 +57,7 @@ public class RoiCsvFileParser extends CsvFileParser{
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
+				throw new Exception(e);
 			}
 			
 		}

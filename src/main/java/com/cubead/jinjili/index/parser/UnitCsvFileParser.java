@@ -5,10 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.lucene.document.Field.Index;
-
 import com.cubead.jinjili.domain.model.Indexable;
-import com.cubead.jinjili.domain.model.Operation;
 import com.cubead.jinjili.domain.model.UnitModel;
 import com.cubead.jinjili.index.indexer.IndexMangerFactory.IndexType;
 import com.cubead.jinjili.util.Constants;
@@ -59,7 +56,7 @@ public class UnitCsvFileParser extends CsvFileParser{
 	}
 	
 	@Override
-	public Indexable nextIndexable() {
+	public Indexable nextIndexable() throws Exception{
 		Map<String, String> tempMap = super.next();
 		UnitModel unitModel = new UnitModel();
 		unitModel.setPlanId(tempMap.get("campaignId"));

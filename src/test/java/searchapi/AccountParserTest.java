@@ -28,19 +28,21 @@ public class AccountParserTest {
 	
 	@Before
 	public void init(){
-		String fileName = "C:/Users/Administrator/Desktop/goldluck/account-20130424-105536-9bc5a4280a0b455bcf8e3e4db22b4ae1.csv";
+		String fileName = "D:\\temp\\download\\wholeaccount\\6099124\\account.csv";
 		indexerManager = new IndexerManager();
+		
 		csvFileParser = new AccountCsvFileParser(fileName, new Date());
 		indexer = new AccountIndexer(indexerManager);
 	}
 	
 	@Test
-	public void index(){
+	public void index() throws Exception{
 		while(csvFileParser.hasNext()){
 			AccountModel accountModel = (AccountModel) csvFileParser.nextIndexable();
 			indexer.index("accountId", accountModel.getAccountId(), accountModel, 1.0f, false);
 			System.out.println(accountModel);
 		}
+		indexerManager.releaseWriter();
 	}
 	
 	@Test

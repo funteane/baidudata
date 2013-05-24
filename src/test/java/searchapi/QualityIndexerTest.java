@@ -37,14 +37,14 @@ public class QualityIndexerTest {
 	}
 	
 	@Test
-	public void test(){
+	public void test() throws Exception{
 		while(csvFileParser.hasNext()){
 			Indexable indexable = csvFileParser.nextIndexable();
 			KeywordModel keywordModel = (KeywordModel) indexable;
 			indexer.index("keywordId", keywordModel.getKeywordId(), indexable, 1.0f, true);
 			qualityUpdateIndexer.index("keywordId", keywordModel.getKeywordId(), indexable, 1.0f, true);
 		}		
-		indexerManager.release();
-		roiIndexerManager.release();
+		indexerManager.releaseWriter();
+		roiIndexerManager.releaseWriter();
 	}
 }

@@ -53,7 +53,7 @@ public class KeywordCsvFileParser extends CsvFileParser{
 	}
 	
 	@Override
-	public Indexable nextIndexable() {
+	public Indexable nextIndexable() throws Exception{
 		Map<String, String> tempMap = super.next();
 		KeywordModel keywordModel = new KeywordModel();
 		keywordModel.setBidding_strategy("CPC");

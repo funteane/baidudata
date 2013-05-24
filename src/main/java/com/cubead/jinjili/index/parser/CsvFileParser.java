@@ -83,7 +83,7 @@ public class CsvFileParser implements Iterator<Map<String, String>> {
 	}
 	
 	
-	public Indexable nextIndexable(){
+	public Indexable nextIndexable() throws Exception{
 		throw new UnsupportedOperationException("Please override");
 	}
 

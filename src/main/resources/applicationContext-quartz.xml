@@ -9,7 +9,8 @@
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="downloadScheduleJobTrigger" />
+				<ref bean="downloadScheduleAccountJobTrigger" />
+				<ref bean="downloadScheduleRoiJobTrigger" />
 				<ref bean="keywordDailyReportJobTrigger" />
 			</list>
 		</property>
@@ -21,25 +22,44 @@
 		<property name="enable" value="true"></property>
 	</bean>
  -->
-	<bean id="downloadScheduleJobDetail"
+	<bean id="downloadScheduleAccountJobDetail"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
-			<ref bean="downloadScheduleJob" />
+			<ref bean="downloadScheduleAccountJob" />
 		</property>
 		<property name="targetMethod">
 			<value>execute</value>
 		</property>
 		<property name="concurrent" value="false" />
 	</bean>
-
-	<bean id="downloadScheduleJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<bean id="downloadScheduleRoiJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="downloadScheduleRoiJob" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="downloadScheduleAccountJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail">
-			<ref bean="downloadScheduleJobDetail" />
+			<ref bean="downloadScheduleAccountJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 30 17 * * ?</value>
+			<value>0 30 6 * * ?</value>
 		</property>
 	</bean>
+
+	<bean id="downloadScheduleRoiJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="downloadScheduleRoiJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 30 13 * * ?</value>
+		</property>
+	</bean>
+		
 	<!-- 百度数据下载定时任务  配置 结束 -->
 	
 	<!-- 百度数据下载定时任务 配置开始 -->
@@ -59,12 +79,13 @@
 		<property name="concurrent" value="false" />
 	</bean>
 
+
 	<bean id="keywordDailyReportJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail">
 			<ref bean="keywordDailyReportJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 40 17 * * ?</value>
+			<value>0 30 14 * * ?</value>
 		</property>
 	</bean>
 	<!-- 百度数据下载定时任务  配置 结束 -->

@@ -34,7 +34,7 @@ public class UnitParserTest {
 	}
 	
 	@Test
-	public void index(){
+	public void index() throws Exception{
 		while(csvFileParser.hasNext()){
 			UnitModel unitModel = (UnitModel) csvFileParser.nextIndexable();
 			indexer.index("unitId", unitModel.getUnitId(), unitModel, 1.0f, false);

@@ -53,6 +53,12 @@ public class TaskModel implements Serializable{
 	@Column(name = "REASON")
 	private String reason;  			//记录失败原因等
 	
+	@Column(name = "DATA_START_DATE")
+	private Date dataStartDate;
+	
+	@Column(name = "DATA_END_DATE")
+	private Date dataEndDate;
+	
 	public TaskStatus getTaskStatus() {
 		return taskStatus;
 	}
@@ -154,6 +160,27 @@ public class TaskModel implements Serializable{
 
 	public void setFinishDate(Date finishDate) {
 		this.finishDate = finishDate;
+	}
+	
+	
+	
+
+	public Date getDataStartDate() {
+		return dataStartDate;
+	}
+
+	public void setDataStartDate(Date dataStartDate) {
+		this.dataStartDate = dataStartDate;
+	}
+	
+	
+
+	public Date getDataEndDate() {
+		return dataEndDate;
+	}
+
+	public void setDataEndDate(Date dataEndDate) {
+		this.dataEndDate = dataEndDate;
 	}
 
 	@Override

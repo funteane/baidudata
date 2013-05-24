@@ -95,7 +95,7 @@ public final class Tools {
 		return SIMPLE_DATE_FORMAT.format(date);
 	}
 	
-	public static Date getDate(String dateString){
+	public static Date getNormalDate(String dateString){
 		if (dateString == null) {
 			return null;
 		}

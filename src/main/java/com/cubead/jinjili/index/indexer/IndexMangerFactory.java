@@ -81,6 +81,7 @@ public  class IndexMangerFactory {
 			break;
 		}
 		
+		System.out.println(path);
 		return indexerManager;
 	}
 	

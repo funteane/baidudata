@@ -35,7 +35,7 @@ public class PlanParseTest {
 	}
 	
 	@Test
-	public void index(){
+	public void index() throws Exception{
 		while(csvFileParser.hasNext()){
 			PlanModel planModel = (PlanModel) csvFileParser.nextIndexable();
 			indexer.index("planId", planModel.getPlanId(), planModel, 1.0f, false);
